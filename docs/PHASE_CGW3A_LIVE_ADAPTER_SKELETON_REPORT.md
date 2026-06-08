@@ -271,7 +271,8 @@ Untracked files:
 ## 12. Commit Hash After Commit
 
 ```
-(To be filled after commit)
+a6e79aa docs: update CGW-3A report with final commit hash
+bc4e294 Add live adapter skeleton for ChatGPT visible bridge
 ```
 
 ## 13. Remaining Limitations
