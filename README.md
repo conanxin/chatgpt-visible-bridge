@@ -47,6 +47,48 @@ The first release ships with a **MockAdapter** that returns structured mock resp
 
 A placeholder `LiveAdapter` exists but returns `blocked` by default. To connect to the real ChatGPT Web, you will need an external browser bridge (e.g., `codex-chatgpt-control` or a Codex/Playwright bridge). This is explicitly out of scope for the MVP.
 
+## Telegram / Hermes Router MVP
+
+The project now includes a **Telegram command router** (`chatgpt_visible_bridge.telegram`) that lets you interact with the task queue via Telegram-style commands without touching the real Telegram API.
+
+### Supported Telegram Commands
+
+| Command | Description | Policy |
+|---------|-------------|--------|
+| `/cgpt ask <prompt>` | Create a consult-only task | `allow_execute=false`, `allow_upload=false` |
+| `/cgpt status` | Show queue status | Read-only |
+| `/cgpt result <task_id>` | Show result and report | Read-only |
+| `/cgpt show <task_id>` | Show task details and prompt | Read-only |
+| `/cgpt help` | Show usage instructions | Read-only |
+
+### How It Works
+
+1. **Telegram is only a command entry** — the router parses `/cgpt` text into local file operations.
+2. **Hermes / OpenClaw can route** `/cgpt` commands to the `chatgpt_visible_bridge` module without including tokens in this repo.
+3. **All `/cgpt` commands are consult-only** — tasks are created with `consult_only=true`, `allow_execute=false`.
+4. **ChatGPT-generated commands are not executed automatically** — the router only creates/reads files; execution requires manual `cgpt-worker-once`.
+5. **`/agent approve` is future work** — not implemented in CGW-2. It will require explicit user confirmation when added.
+6. **CGW-2 does not use the real Telegram API** — the router is a library; a real bot or gateway is required for production.
+7. **CGW-2 does not operate the real ChatGPT Web** — mock adapter is still the default.
+
+### Developer Testing (CLI Simulation)
+
+```bash
+# Simulate a Telegram message without a real bot
+python3 -m chatgpt_visible_bridge.cli telegram-router "/cgpt ask Review the architecture"
+
+# Check status
+python3 -m chatgpt_visible_bridge.cli telegram-router "/cgpt status"
+
+# Run the worker
+python3 -m chatgpt_visible_bridge.cli worker-once --mock
+
+# Get the result
+python3 -m chatgpt_visible_bridge.cli telegram-router "/cgpt result <task_id>"
+```
+
+See [docs/HERMES_INTEGRATION.md](docs/HERMES_INTEGRATION.md) for how to wire this into Hermes/OpenClaw.
+
 ## Quick Start
 
 ```bash
@@ -133,6 +175,8 @@ See [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) for the release p
 - [docs/SECURITY_BOUNDARY.md](docs/SECURITY_BOUNDARY.md) — Security and trust boundaries
 - [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) — Release plan and roadmap
 - [docs/PHASE_LOG.md](docs/PHASE_LOG.md) — Development phase log
+- [docs/CGW2_TELEGRAM_ROUTER.md](docs/CGW2_TELEGRAM_ROUTER.md) — Telegram router architecture
+- [docs/HERMES_INTEGRATION.md](docs/HERMES_INTEGRATION.md) — Hermes / OpenClaw integration guide
 
 ## Contributing
 
