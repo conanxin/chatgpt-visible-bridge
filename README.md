@@ -1,6 +1,6 @@
 # ChatGPT Visible Bridge
 
-A manual, auditable, open-source bridge between local agents and the ChatGPT Web interface.
+A manual, auditable, open-source bridge between local agents and the ChatGPT Web interface. **v0.1.0-alpha** — Alpha release.
 
 > **Not an API wrapper. Not a headless bot. This is a task queue with a one-shot worker.**
 
@@ -35,13 +35,6 @@ A manual, auditable, open-source bridge between local agents and the ChatGPT Web
                                          │  Live Adapter│  (future)
                                          └──────────────┘
 ```
-
-## Default Mode: Mock Adapter
-
-The first release ships with a **MockAdapter** that returns structured mock responses. This lets you:
-- Test the full pipeline without touching ChatGPT Web.
-- Validate the task contract and report format.
-- Build the workflow before connecting a real browser bridge.
 
 ## Default Mode: Mock Adapter
 
@@ -204,7 +197,7 @@ See [docs/SECURITY_BOUNDARY.md](docs/SECURITY_BOUNDARY.md) for details.
 ## Open Source
 
 - **License**: MIT
-- **Status**: MVP — looking for feedback before v1.0
+- **Status**: v0.1.0-alpha — Alpha release
 
 See [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) for the release plan and roadmap.
 
@@ -224,4 +217,10 @@ See [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) for the release p
 
 ## Contributing
 
-Issues and PRs welcome. Please keep the MVP minimal — this is a glue layer, not an automation framework.
+Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Please keep changes focused — this is a glue layer, not an automation framework.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for security policies and vulnerability reporting.

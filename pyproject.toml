@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "chatgpt-visible-bridge"
-version = "0.1.0"
+version = "0.1.0-alpha"
 description = "Manual, auditable, one-shot ChatGPT Web bridge for local agents"
 readme = "README.md"
 license = { text = "MIT" }

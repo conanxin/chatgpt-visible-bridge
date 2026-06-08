@@ -2,7 +2,7 @@
   "id": "a1b2c3d4e5f67890",
   "status": "success",
   "summary": "## 任务理解\n\n已收到任务（ID: a1b2c3d4e5f67890）。以下是对请求的分析和建议。\n\n## 建议\n\n1. 仔细审查原始需求。\n2. 将大任务拆分为可验证的小步骤。\n3. 使用本地工具或脚本执行，而非自动执行。\n\n## 风险点\n\n- 自动执行未经审查的 AI 建议可能导致意外副作用。\n- 文件操作前应确认路径和权限。\n- 敏感信息不应离开本地环境。\n\n## 下一步建议\n\n- 在 `reports/` 中查看完整分析。\n- 如需执行，请手动审核并运行 `/agent approve`。\n\n---\n\n**注意：这是 mock adapter，未调用真实 ChatGPT Web。**",
-  "report_path": "/home/conanxin/.openclaw/workspace/chatgpt-visible-bridge/reports/a1b2c3d4e5f67890.md",
+  "report_path": "~/.openclaw/workspace/chatgpt-visible-bridge/reports/a1b2c3d4e5f67890.md",
   "completed_at": "2026-06-08T17:05:00+08:00",
   "adapter": "mock",
   "stop_reason": "mock_consult_only",
