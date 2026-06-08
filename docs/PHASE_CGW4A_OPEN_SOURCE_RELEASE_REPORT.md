@@ -150,7 +150,7 @@ origin  https://github.com/conanxin/chatgpt-visible-bridge.git (push)
 ## 9. Commit Hash
 
 ```
-2456baf docs: add CGW-4A open source release report
+7a78fec docs: add CGW-4A open source release report
 8d17560 (tag: v0.1.0-alpha) Prepare v0.1.0-alpha open source release
 ```
 
