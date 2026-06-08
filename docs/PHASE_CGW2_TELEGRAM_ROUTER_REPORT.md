@@ -201,7 +201,7 @@ No `.env`, no credentials, no generated files to be committed.
 ## 9. Commit Hash After Commit
 
 ```
-a2268a3 Add Telegram router MVP for ChatGPT visible bridge
+6928601 Add Telegram router MVP for ChatGPT visible bridge
 ```
 
 ---
@@ -269,7 +269,7 @@ a2268a3 Add Telegram router MVP for ChatGPT visible bridge
 | 7 | Docs updated | ✅ | README, CGW2_TELEGRAM_ROUTER, HERMES_INTEGRATION, TELEGRAM_WORKFLOW, PHASE_LOG |
 | 8 | Examples are open-source safe | ✅ | `hermes-router-example.py` has no token/chat_id/private path; `telegram-commands.md` is generic |
 | 9 | No token/session/chat_id hardcoding | ✅ | Security scan found no hardcoded credentials |
-| 10 | Local git commit created | ⏳ | After this report, commit with specified message |
+| 10 | Local git commit created | ✅ | `6928601` (main CGW-2 commit) + `54aa5ac` (report hash update) |
 | 11 | Final report exists | ✅ | This file: `docs/PHASE_CGW2_TELEGRAM_ROUTER_REPORT.md` |
 
 ---
