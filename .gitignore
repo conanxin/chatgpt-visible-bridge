@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment — never commit real credentials
+.env
+*.env.local
+*.env.production
+
+# Runtime data (user-specific, should not be committed by default)
+# Users may choose to symlink these elsewhere or back them up separately
+inbox/
+active/
+outbox/
+failed/
+reports/
+logs/
+
+# Logs
+*.log
+
+# ChatGPT bridge placeholders (no real credentials)
+# If a future adapter stores cookies or session data, keep it out:
+cookies/
+session/
+*.cookie
+*.session

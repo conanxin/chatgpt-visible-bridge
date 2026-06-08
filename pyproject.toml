@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chatgpt-visible-bridge"
+version = "0.1.0"
+description = "Manual, auditable, one-shot ChatGPT Web bridge for local agents"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "chatgpt-visible-bridge contributors" }
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.10"
+
+[project.scripts]
+cgpt-create-task = "chatgpt_visible_bridge.cli:main"
+cgpt-task-status = "chatgpt_visible_bridge.cli:main"
+cgpt-worker-once = "chatgpt_visible_bridge.cli:main"
+cgpt-worker-drain = "chatgpt_visible_bridge.cli:main"
+cgpt-task-result = "chatgpt_visible_bridge.cli:main"
+cgpt-task-show = "chatgpt_visible_bridge.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/conanxin/chatgpt-visible-bridge"
+Issues = "https://github.com/conanxin/chatgpt-visible-bridge/issues"
+
+[tool.setuptools.packages.find]
+include = ["chatgpt_visible_bridge*"]
