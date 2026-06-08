@@ -42,11 +42,14 @@ This is a **minimum viable product** for community feedback. It is intentionally
 
 | Milestone | Description | Status |
 |-----------|-------------|--------|
-| v0.1.0 (MVP) | Core pipeline with mock adapter | ✅ Done |
-| v0.2.0 | Telegram bot wrapper (optional) | Planned |
-| v0.3.0 | Live adapter via codex-chatgpt-control | Planned |
-| v0.4.0 | Task retry, batch processing, templates | Planned |
+| v0.1.0-alpha | Core pipeline, CLI, mock adapter, Telegram router, guarded live adapter | ✅ Done |
+| v0.1.1-alpha | Packaging and installation polish | Planned |
+| v0.2.0-alpha | Real browser-host live smoke from Codex Desktop / compatible host | Planned |
+| v0.3.0-alpha | Telegram full loop with real results | Planned |
+| v0.4.0-alpha | Approval flow design (`/agent approve`) | Planned |
 | v1.0.0 | Stable API, full documentation, community tested | Target |
+
+For the full roadmap, see [ROADMAP.md](../ROADMAP.md).
 
 ## Contributing
 

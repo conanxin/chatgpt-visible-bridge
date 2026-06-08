@@ -198,6 +198,8 @@ See [docs/SECURITY_BOUNDARY.md](docs/SECURITY_BOUNDARY.md) for details.
 
 - **License**: MIT
 - **Status**: v0.1.0-alpha — Alpha release
+- **Roadmap**: [ROADMAP.md](ROADMAP.md)
+- **Latest Release**: [v0.1.0-alpha](https://github.com/conanxin/chatgpt-visible-bridge/releases/tag/v0.1.0-alpha)
 
 See [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) for the release plan and roadmap.
 

@@ -245,3 +245,95 @@
 - Continue preserving no-file-upload and no-auto-execution boundaries.
 
 ---
+
+## Phase CGW-4A: Open Source Release
+
+**Date:** 2026-06-08
+**Goal:** v0.1.0-alpha open source release, README/docs polish, GitHub initial push
+**Status:** ✅ PASS
+
+### What Was Built
+
+1. **Open source preparation files**
+   - `CONTRIBUTING.md` — Contribution guidelines
+   - `SECURITY.md` — Security policy and vulnerability reporting
+   - `CHANGELOG.md` — v0.1.0-alpha changelog with all phases
+   - `docs/RELEASE_NOTES_v0.1.0-alpha.md` — Comprehensive release notes
+
+2. **README updates**
+   - v0.1.0-alpha status badge
+   - "What Works Now / What Does NOT Work Yet" sections
+   - Open Source section with release and roadmap links
+   - Contributing and Security links
+
+3. **Examples audit**
+   - Fixed `examples/result.example.json` — generic path placeholder
+
+4. **GitHub release**
+   - GitHub repo: https://github.com/conanxin/chatgpt-visible-bridge
+   - Tag `v0.1.0-alpha` pushed to origin
+   - `master` branch pushed to origin
+
+5. **Tests and smoke**
+   - 75 tests pass
+   - Mock smoke: `VISIBLE_CHATGPT_BRIDGE_OK` confirmed
+   - Security scan: no token/cookie/chat_id/profile hardcoded
+
+### Design Decisions
+
+- **Honest alpha positioning**: README clearly states what works and what doesn't.
+- **No overpromising**: Live ChatGPT Web smoke is not confirmed in WSL/Hermes runtime.
+- **Security-first**: No real credentials in repo, `.env` not tracked, examples are generic.
+
+### Next Phase Ideas
+
+- CGW-4B: GitHub Release page, ROADMAP.md, public issues, milestones.
+
+---
+
+## Phase CGW-4B: GitHub Release + Roadmap
+
+**Date:** 2026-06-08
+**Goal:** GitHub Release page, ROADMAP.md, README updates, issues, milestone, topics
+**Status:** ✅ PASS
+
+### What Was Built
+
+1. **GitHub Release**
+   - Created GitHub Release v0.1.0-alpha: https://github.com/conanxin/chatgpt-visible-bridge/releases/tag/v0.1.0-alpha
+   - Release notes from `docs/RELEASE_NOTES_v0.1.0-alpha.md`
+
+2. **ROADMAP.md**
+   - Current release: v0.1.0-alpha with what works / what doesn't work
+   - Near-term roadmap: v0.1.1-alpha through v0.4.0-alpha
+   - Future/backlog: existing tab reuse, screenshots, dashboard, PyPI
+   - Non-goals: API wrapper, headless bot, bypass, harvesting, unattended execution
+
+3. **README updates**
+   - Added Roadmap link to `ROADMAP.md`
+   - Added Latest Release link to GitHub Releases
+
+4. **GitHub Issues** (5 created)
+   - Issue #1: CGW-3D — Real live smoke from Codex/browser host
+   - Issue #2: CGW-5 — Telegram to manual live worker to Telegram result full loop
+   - Issue #3: Improve installation and packaging docs
+   - Issue #4: Add optional local dashboard concept
+   - Issue #5: Design /agent approve flow without auto-execution
+
+5. **GitHub Milestone**
+   - v0.2.0-alpha — Real browser-host live smoke
+
+6. **GitHub Topics** (7 set)
+   - chatgpt, telegram, local-agent, codex, browser-bridge, task-queue, ai-agents
+
+7. **Tests and smoke**
+   - 75 tests pass
+   - Mock smoke: `VISIBLE_CHATGPT_BRIDGE_OK` confirmed
+   - Security scan: no token/cookie/chat_id/profile hardcoded
+
+### Next Phase Ideas
+
+- CGW-3D: Real live smoke from Codex Desktop / compatible browser bridge host
+- CGW-5: Telegram → manual live worker → Telegram result full loop
+- v0.1.1-alpha: Packaging and installation polish
+
