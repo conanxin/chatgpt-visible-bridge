@@ -121,6 +121,7 @@ class Result:
     adapter: str = "mock"
     stop_reason: Optional[str] = None
     suggested_next_action: Optional[str] = None
+    response_markdown: Optional[str] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -132,6 +133,7 @@ class Result:
             "adapter": self.adapter,
             "stop_reason": self.stop_reason,
             "suggested_next_action": self.suggested_next_action,
+            "response_markdown": self.response_markdown,
         }
 
     def to_json(self, indent: int = 2) -> str:
@@ -155,4 +157,5 @@ class Result:
             adapter=d.get("adapter", "mock"),
             stop_reason=d.get("stop_reason"),
             suggested_next_action=d.get("suggested_next_action"),
+            response_markdown=d.get("response_markdown"),
         )

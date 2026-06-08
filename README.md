@@ -50,21 +50,28 @@ The first release ships with a **MockAdapter** that returns structured mock resp
 - Validate the task contract and report format.
 - Build the workflow before connecting a real browser bridge.
 
-## Live Adapter Skeleton (CGW-3A)
+## Live Adapter (CGW-3B Guarded Smoke)
 
-A `CodexChatGPTControlAdapter` skeleton is now available. It returns `blocked` by default with a detailed explanation. This is the safe preparation phase before real live smoke (CGW-3B).
+A `CodexChatGPTControlAdapter` is available for guarded live smoke through `codex-chatgpt-control`.
+It remains blocked by default unless live mode is explicitly enabled.
 
 ```bash
+# Safe default: no real ChatGPT Web operation
 cgpt-worker-once --adapter codex-chatgpt-control
+
+# Explicit one-shot live smoke from a compatible Codex/browser bridge host
+export CGW_ENABLE_CODEX_CHATGPT_CONTROL_LIVE=1
+cgpt-worker-once --adapter codex-chatgpt-control --live
 ```
 
-**CGW-3A behavior:**
-- Returns `blocked` status with `stop_reason: browser_bridge_unavailable`
-- Does not call ChatGPT Web or launch a browser
-- Includes a detailed report explaining the CGW-3A skeleton status
-- Points to CGW-3B for real live smoke from a compatible browser bridge host
+**CGW-3B behavior:**
+- Without `--live` or `CGW_ENABLE_CODEX_CHATGPT_CONTROL_LIVE=1`, returns `blocked` with `stop_reason: live_not_enabled`
+- If the package is unavailable, returns `blocked` with `stop_reason: dependency_missing`
+- If the browser bridge is unavailable, returns `blocked` with `stop_reason: browser_bridge_unavailable`
+- On success, writes `response_markdown` to `outbox/` and a human-readable report to `reports/`
+- Does not upload files, download files, read cookies/session data, or execute ChatGPT returned commands
 
-**CGW-3B (future):** Will implement real live smoke via `codex-chatgpt-control` in a compatible browser bridge host (e.g., Codex Desktop).
+Ordinary shell execution is expected to block safely. Real live smoke requires a compatible Codex/browser bridge host with ChatGPT Web already logged in. See [docs/CGW3B_LIVE_SMOKE.md](docs/CGW3B_LIVE_SMOKE.md).
 
 ## Telegram / Hermes Router MVP
 
@@ -172,6 +179,9 @@ cgpt-worker-once --adapter mock
 
 # CodexChatGPTControlAdapter skeleton (CGW-3A)
 cgpt-worker-once --adapter codex-chatgpt-control
+
+# Guarded live smoke (CGW-3B)
+CGW_ENABLE_CODEX_CHATGPT_CONTROL_LIVE=1 cgpt-worker-once --adapter codex-chatgpt-control --live
 ```
 
 ## Modes & Policies
@@ -186,7 +196,8 @@ cgpt-worker-once --adapter codex-chatgpt-control
 - No unattended browser sessions.
 - No credential storage (no tokens, no cookies, no session data in the repo).
 - No Telegram bot token in the repository.
-- Task files are local-only. No network calls in the MVP.
+- Live adapter is explicit, one-shot, and blocker-safe.
+- Task files are local-only unless the user explicitly runs guarded live smoke.
 
 See [docs/SECURITY_BOUNDARY.md](docs/SECURITY_BOUNDARY.md) for details.
 
@@ -209,6 +220,7 @@ See [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) for the release p
 - [docs/CGW2_TELEGRAM_ROUTER.md](docs/CGW2_TELEGRAM_ROUTER.md) — Telegram router architecture
 - [docs/HERMES_INTEGRATION.md](docs/HERMES_INTEGRATION.md) — Hermes / OpenClaw integration guide
 - [docs/CGW3A_LIVE_ADAPTER_SKELETON.md](docs/CGW3A_LIVE_ADAPTER_SKELETON.md) — Live adapter skeleton and CGW-3A architecture
+- [docs/CGW3B_LIVE_SMOKE.md](docs/CGW3B_LIVE_SMOKE.md) — Guarded live smoke requirements and commands
 
 ## Contributing
 

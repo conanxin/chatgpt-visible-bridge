@@ -78,18 +78,16 @@
 - 不硬编码 bot token 或 chat_id。
 - Telegram bot（如果实现）只读写本地文件，不执行命令。
 
-### 6. Live Adapter 安全约束（CGW-3A）
+### 6. Live Adapter 安全约束（CGW-3B）
 
-- **CGW-3A 不操作真实 ChatGPT Web**：`codex-chatgpt-control` adapter 是骨架，默认返回 `blocked`。
-- **不启动浏览器**：骨架阶段不启动任何浏览器实例。
-- **不访问网络**：不调用 ChatGPT Web 或任何外部 API。
-- **不读取 cookie/session**：骨架阶段不需要浏览器凭证。
-- **CGW-3B 安全要求**：当实现真实 live adapter 时，必须：
-  - 在可见浏览器窗口中运行（headful，非 headless）
-  - 用户可中断（Ctrl+C 或关闭浏览器窗口）
-  - 单次任务硬超时（如 5 分钟）
-  - 遇到 blocker（验证码、登录失效）时返回 `blocked` 并记录原因
-  - 不自动重试，等待用户介入
+- **默认 blocked**：`codex-chatgpt-control` adapter 未显式启用 live 时返回 `blocked/live_not_enabled`，不操作真实 ChatGPT Web。
+- **显式 one-shot**：真实 live smoke 需要 `CGW_ENABLE_CODEX_CHATGPT_CONTROL_LIVE=1` 或 CLI `--live`，并通过手动 `worker-once` 触发。
+- **兼容 host 要求**：真实 live smoke 必须在支持 Codex/browser bridge 的 host 中运行；普通 shell 下 `dependency_missing` 或 `browser_bridge_unavailable` 是预期 blocker。
+- **不上传/下载文件**：CGW-3B live adapter 只提交纯文本 prompt 并读取 Markdown 回复。
+- **不读取 cookie/session/profile/token**：登录态由外部可见浏览器和 `codex-chatgpt-control` 管理，本项目不读取或打印浏览器凭证。
+- **不硬编码 selectors**：本项目不内置 ChatGPT DOM selector scraping 或私有接口调用。
+- **不自动执行返回内容**：ChatGPT 返回的 Markdown 只写入 `outbox/` 和 `reports/`。
+- **失败写 blocker**：遇到依赖缺失、桥不可用、登录要求、权限要求或 UI 状态不可读时，必须写入结构化 blocked result 和 next action。
 
 ---
 
@@ -104,7 +102,7 @@
 | 数据外泄 | MVP 无网络调用；本地文件系统 only |
 | 浏览器被劫持 | 浏览器实例每次独立启动、处理完关闭 |
 | 任务卡死 | 硬超时；用户可中断；blocker 报告 |
-| 真实 ChatGPT 误操作 | CGW-3A 骨架不操作真实 Web；CGW-3B 需要显式启用 |
+| 真实 ChatGPT 误操作 | CGW-3B 默认 blocked；真实 live smoke 需要显式启用且只处理 one-shot |
 
 ---
 

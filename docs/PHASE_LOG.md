@@ -188,3 +188,60 @@
 - CGW-3B: Real live smoke from Codex Desktop / compatible browser bridge host using codex-chatgpt-control.
 
 ---
+
+## Phase CGW-3B: Guarded Live Adapter Smoke Path
+
+**Date:** 2026-06-08
+**Goal:** Extend `CodexChatGPTControlAdapter` from skeleton-only blocker into a guarded real live smoke adapter path.
+
+### What Was Built
+
+1. **Guarded live adapter path**
+   - `CGW_ENABLE_CODEX_CHATGPT_CONTROL_LIVE=1` enables live mode.
+   - `worker-once --adapter codex-chatgpt-control --live` enables live mode for that one command.
+   - Without explicit live enablement, the adapter returns `blocked/live_not_enabled` and does not import or call `codex_chatgpt_control`.
+   - Missing package returns `blocked/dependency_missing`.
+   - Bridge or UI failures return structured blockers such as `browser_bridge_unavailable`, `login_required`, or `ui_state_unavailable`.
+
+2. **Response persistence**
+   - Successful live responses include `response_markdown` in result JSON.
+   - Worker reports include a `Response Markdown` section when present.
+   - Telegram `/cgpt result <task_id>` continues to display the result summary and report path.
+
+3. **Safety posture**
+   - No file upload or download.
+   - No ChatGPT selectors or private endpoint scraping.
+   - No cookie, session, browser profile, token, or chat_id access.
+   - No automatic execution of ChatGPT returned commands.
+   - Still manual one-shot; no watch daemon.
+
+4. **Tests**
+   - Ordinary pytest uses mocked `codex_chatgpt_control` only.
+   - Live flag off, dependency missing, bridge unavailable, live success, blocked result writing, and CLI `--live` behavior are covered.
+
+5. **Documentation**
+   - Added `docs/CGW3B_LIVE_SMOKE.md`.
+   - Updated `README.md`.
+   - Updated `docs/SECURITY_BOUNDARY.md`.
+
+### Design Decisions
+
+- **Explicit live gate**: The adapter does not attempt real ChatGPT Web operation unless live mode is explicitly enabled.
+- **Dependency is optional**: `codex_chatgpt_control` is imported only on the live path. Missing dependency is a normal blocked result, not a crash.
+- **Package API only**: The adapter calls documented package-level/client-level prompt methods if available. It does not hardcode ChatGPT DOM selectors.
+- **New thread default**: CGW-3B requests a new thread when supported. Existing tab/thread reuse is deferred to CGW-3C.
+
+### Known Limitations
+
+- Live smoke succeeds only in a compatible Codex/browser bridge host with the `codex_chatgpt_control` package available and ChatGPT Web logged in.
+- Existing tab/thread reuse is not guaranteed in CGW-3B.
+- No file upload/download support.
+- No execution mode.
+
+### Next Phase Ideas
+
+- CGW-3C: Existing tab/thread reuse if the SDK supports it cleanly.
+- CGW-3C: Telegram -> manual live worker -> `/cgpt result` end-to-end live flow.
+- Continue preserving no-file-upload and no-auto-execution boundaries.
+
+---

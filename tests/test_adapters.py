@@ -61,9 +61,9 @@ def test_codex_adapter_returns_blocked():
     result = adapter.send(task)
     assert result.status == ResultStatus.BLOCKED
     assert result.adapter == "codex-chatgpt-control"
-    assert result.stop_reason == "browser_bridge_unavailable"
-    assert "CGW-3A Skeleton" in result.summary
-    assert "CGW-3B" in result.suggested_next_action
+    assert result.stop_reason == "live_not_enabled"
+    assert "CGW-3B Live Adapter Blocked" in result.summary
+    assert "worker-once --live" in result.suggested_next_action
 
 
 def test_codex_adapter_not_available():

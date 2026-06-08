@@ -121,6 +121,16 @@ class Worker:
                 f"",
             ])
 
+        if result.response_markdown:
+            lines.extend([
+                f"---",
+                f"",
+                f"## Response Markdown",
+                f"",
+                result.response_markdown,
+                f"",
+            ])
+
         lines.extend([
             f"---",
             f"",

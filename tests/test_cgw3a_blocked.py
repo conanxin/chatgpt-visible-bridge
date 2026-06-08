@@ -24,9 +24,9 @@ def test_worker_with_codex_adapter_blocked():
         assert result.id == task.id
         assert result.status == ResultStatus.BLOCKED
         assert result.adapter == "codex-chatgpt-control"
-        assert result.stop_reason == "browser_bridge_unavailable"
-        assert "CGW-3A Skeleton" in result.summary
-        assert "CGW-3B" in result.suggested_next_action
+        assert result.stop_reason == "live_not_enabled"
+        assert "CGW-3B Live Adapter Blocked" in result.summary
+        assert "worker-once --live" in result.suggested_next_action
 
         # Task moved to failed/ (blocked tasks go to failed/)
         assert (ws.failed / f"{task.id}.json").exists()
@@ -53,8 +53,8 @@ def test_blocked_result_has_report_path():
         # Report contains blocker info
         report = Path(result.report_path).read_text(encoding="utf-8")
         assert "blocked" in report.lower()
-        assert "CGW-3A" in report
-        assert "browser_bridge_unavailable" in report
+        assert "CGW-3B" in report
+        assert "live_not_enabled" in report
 
 
 def test_telegram_router_blocked_result():
@@ -76,7 +76,7 @@ def test_telegram_router_blocked_result():
 
             assert "blocked" in result_response.lower()
             assert "codex-chatgpt-control" in result_response
-            assert "CGW-3B" in result_response or "browser bridge" in result_response
+            assert "CGW-3B" in result_response or "worker-once --live" in result_response
         finally:
             if old is None:
                 os.environ.pop("CGW_HOME", None)
@@ -99,10 +99,10 @@ def test_blocked_report_content():
         report = ws.report_path(task.id).read_text(encoding="utf-8")
         assert result.status.value == "blocked"
         assert result.adapter == "codex-chatgpt-control"
-        assert "CGW-3A Skeleton" in report
+        assert "CGW-3B Live Adapter Blocked" in report
         assert "No real ChatGPT Web operation" in report
-        assert "Next Phase" in report
-        assert "CGW-3B" in report
+        assert "Next Safe Action" in report
+        assert "worker-once --live" in report
 
 
 def test_blocked_task_status_in_workspace():

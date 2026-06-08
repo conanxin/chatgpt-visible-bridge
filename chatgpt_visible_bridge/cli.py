@@ -5,10 +5,12 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 from pathlib import Path
 
 from . import __version__
+from .adapters.codex_chatgpt_control import LIVE_ENV
 from .adapter import get_adapter
 from .schema import Task, TaskPolicy, TaskMode, TaskStatus, TaskType
 from .telegram import TelegramRouter
@@ -86,7 +88,17 @@ def cmd_task_status(args: argparse.Namespace) -> int:
 def cmd_worker_once(args: argparse.Namespace) -> int:
     ws = _workspace()
     adapter = args.adapter or "mock"
-    result = process_one(ws, adapter_name=adapter)
+    old_live = os.environ.get(LIVE_ENV)
+    if args.live:
+        os.environ[LIVE_ENV] = "1"
+    try:
+        result = process_one(ws, adapter_name=adapter)
+    finally:
+        if args.live:
+            if old_live is None:
+                os.environ.pop(LIVE_ENV, None)
+            else:
+                os.environ[LIVE_ENV] = old_live
     if result is None:
         print("No pending tasks.")
         return 0
@@ -274,6 +286,11 @@ def main(argv: list[str] | None = None) -> int:
     p_once = sub.add_parser("worker-once", help="Process one task, then exit")
     p_once.add_argument("--adapter", default="mock", help="Adapter name (mock or codex-chatgpt-control)")
     p_once.add_argument("--mock", action="store_const", const="mock", dest="adapter", help="Use mock adapter")
+    p_once.add_argument(
+        "--live",
+        action="store_true",
+        help="Explicitly enable one-shot live mode for codex-chatgpt-control",
+    )
     p_once.set_defaults(func=cmd_worker_once)
 
     # cgpt-worker-drain
