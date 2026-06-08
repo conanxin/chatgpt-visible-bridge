@@ -131,10 +131,16 @@ Telegram 或本地 agent 创建任务
 | **drain** | `cgpt-worker-drain --mock` | 处理所有 pending 任务后退出 | 可选 |
 | **watch** | （未来） | 常驻监听 inbox（非 MVP 默认） | 暂不实现 |
 
-### 3. Adapter 层
+### 3. Adapter 层（CGW-3A）
 
 - **MockAdapter**：默认，返回结构化 mock 回复，不访问网络。
-- **LiveAdapter**：占位符，返回 `blocked`。未来接入 `codex-chatgpt-control` 等浏览器桥。
+- **CodexChatGPTControlAdapter**：CGW-3A 骨架。返回 `blocked`（`browser_bridge_unavailable`）。CGW-3B 将在兼容浏览器桥 host 中实现真实 live smoke。
+
+Adapter 通过 `--adapter` 参数选择：
+```bash
+cgpt-worker-once --adapter mock
+cgpt-worker-once --adapter codex-chatgpt-control
+```
 
 ### 4. CLI / Telegram 接口
 

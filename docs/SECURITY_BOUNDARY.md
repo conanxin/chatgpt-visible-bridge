@@ -78,6 +78,19 @@
 - 不硬编码 bot token 或 chat_id。
 - Telegram bot（如果实现）只读写本地文件，不执行命令。
 
+### 6. Live Adapter 安全约束（CGW-3A）
+
+- **CGW-3A 不操作真实 ChatGPT Web**：`codex-chatgpt-control` adapter 是骨架，默认返回 `blocked`。
+- **不启动浏览器**：骨架阶段不启动任何浏览器实例。
+- **不访问网络**：不调用 ChatGPT Web 或任何外部 API。
+- **不读取 cookie/session**：骨架阶段不需要浏览器凭证。
+- **CGW-3B 安全要求**：当实现真实 live adapter 时，必须：
+  - 在可见浏览器窗口中运行（headful，非 headless）
+  - 用户可中断（Ctrl+C 或关闭浏览器窗口）
+  - 单次任务硬超时（如 5 分钟）
+  - 遇到 blocker（验证码、登录失效）时返回 `blocked` 并记录原因
+  - 不自动重试，等待用户介入
+
 ---
 
 ## 威胁模型
@@ -91,6 +104,7 @@
 | 数据外泄 | MVP 无网络调用；本地文件系统 only |
 | 浏览器被劫持 | 浏览器实例每次独立启动、处理完关闭 |
 | 任务卡死 | 硬超时；用户可中断；blocker 报告 |
+| 真实 ChatGPT 误操作 | CGW-3A 骨架不操作真实 Web；CGW-3B 需要显式启用 |
 
 ---
 

@@ -8,6 +8,27 @@
 | **drain** | `cgpt-worker-drain --mock` | 处理 inbox 中所有 pending 任务 | 全部处理完后退出 | 可选 |
 | **watch** | `cgpt-worker-watch`（未来） | 常驻监听 inbox/，自动处理新任务 | 永不退出，需手动停止 | 非 MVP 默认 |
 
+## Adapter 选择（CGW-3A 新增）
+
+Worker 现在支持 `--adapter` 参数选择不同的 adapter：
+
+```bash
+cgpt-worker-once --adapter mock
+cgpt-worker-once --adapter codex-chatgpt-control
+```
+
+| Adapter | 状态 | 说明 |
+|---------|------|------|
+| **mock** | ✅ 可用 | 默认。返回结构化 mock 响应，无网络调用。 |
+| **codex-chatgpt-control** | ⛔ CGW-3A 骨架 | 返回 `blocked`（`browser_bridge_unavailable`）。需要 CGW-3B 在兼容浏览器桥 host 中运行。 |
+
+### 向后兼容
+
+```bash
+cgpt-worker-once --mock          # 等同于 --adapter mock
+cgpt-worker-once --adapter mock   # 显式指定
+```
+
 ## Once 模式（默认推荐）
 
 ```bash
@@ -113,14 +134,22 @@ cgpt-worker-drain --mock
 
 MockAdapter 必须返回包含 `VISIBLE_CHATGPT_BRIDGE_OK` 的 summary，用于验证 pipeline 是否打通。
 
-## Live 模式（占位符，不实现）
+## Live 模式（CGW-3A 骨架，CGW-3B 实现）
 
 ```bash
-cgpt-worker-once --adapter live
+cgpt-worker-once --adapter codex-chatgpt-control
 ```
 
-- MVP 中返回 `blocked` 状态。
+- **CGW-3A**：返回 `blocked` 状态（`browser_bridge_unavailable`）。不操作真实 ChatGPT Web。
+- **CGW-3B**：将在兼容浏览器桥 host 中实现真实 live smoke。
 - 需要外部浏览器桥（如 codex-chatgpt-control）才能工作。
+
+### Blocker 报告
+
+当 live adapter 返回 blocked 时，report 包含：
+- 当前状态说明（CGW-3A 骨架）
+- 失败原因（browser_bridge_unavailable）
+- 下一步建议（CGW-3B / 兼容浏览器桥 host）
 
 ## 为什么 Watch 不作为默认？
 

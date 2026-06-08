@@ -272,13 +272,13 @@ def main(argv: list[str] | None = None) -> int:
 
     # cgpt-worker-once
     p_once = sub.add_parser("worker-once", help="Process one task, then exit")
-    p_once.add_argument("--adapter", default="mock", help="Adapter name (mock or live)")
+    p_once.add_argument("--adapter", default="mock", help="Adapter name (mock or codex-chatgpt-control)")
     p_once.add_argument("--mock", action="store_const", const="mock", dest="adapter", help="Use mock adapter")
     p_once.set_defaults(func=cmd_worker_once)
 
     # cgpt-worker-drain
     p_drain = sub.add_parser("worker-drain", help="Process all pending tasks, then exit")
-    p_drain.add_argument("--adapter", default="mock", help="Adapter name")
+    p_drain.add_argument("--adapter", default="mock", help="Adapter name (mock or codex-chatgpt-control)")
     p_drain.add_argument("--mock", action="store_const", const="mock", dest="adapter", help="Use mock adapter")
     p_drain.set_defaults(func=cmd_worker_drain)
 

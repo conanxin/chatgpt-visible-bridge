@@ -43,9 +43,28 @@ The first release ships with a **MockAdapter** that returns structured mock resp
 - Validate the task contract and report format.
 - Build the workflow before connecting a real browser bridge.
 
-## Live Adapter (Future)
+## Default Mode: Mock Adapter
 
-A placeholder `LiveAdapter` exists but returns `blocked` by default. To connect to the real ChatGPT Web, you will need an external browser bridge (e.g., `codex-chatgpt-control` or a Codex/Playwright bridge). This is explicitly out of scope for the MVP.
+The first release ships with a **MockAdapter** that returns structured mock responses. This lets you:
+- Test the full pipeline without touching ChatGPT Web.
+- Validate the task contract and report format.
+- Build the workflow before connecting a real browser bridge.
+
+## Live Adapter Skeleton (CGW-3A)
+
+A `CodexChatGPTControlAdapter` skeleton is now available. It returns `blocked` by default with a detailed explanation. This is the safe preparation phase before real live smoke (CGW-3B).
+
+```bash
+cgpt-worker-once --adapter codex-chatgpt-control
+```
+
+**CGW-3A behavior:**
+- Returns `blocked` status with `stop_reason: browser_bridge_unavailable`
+- Does not call ChatGPT Web or launch a browser
+- Includes a detailed report explaining the CGW-3A skeleton status
+- Points to CGW-3B for real live smoke from a compatible browser bridge host
+
+**CGW-3B (future):** Will implement real live smoke via `codex-chatgpt-control` in a compatible browser bridge host (e.g., Codex Desktop).
 
 ## Telegram / Hermes Router MVP
 
@@ -142,6 +161,18 @@ See [docs/TASK_CONTRACT.md](docs/TASK_CONTRACT.md) and [examples/task.example.js
 | `cgpt-worker-drain` | Process all pending tasks, then exit |
 | `cgpt-task-result` | Show result and report |
 | `cgpt-task-show` | Show raw prompt and task detail |
+| `cgpt-telegram-router` | Simulate Telegram message (developer helper) |
+
+### Adapter Options
+
+```bash
+# Mock adapter (default)
+cgpt-worker-once --mock
+cgpt-worker-once --adapter mock
+
+# CodexChatGPTControlAdapter skeleton (CGW-3A)
+cgpt-worker-once --adapter codex-chatgpt-control
+```
 
 ## Modes & Policies
 
@@ -177,6 +208,7 @@ See [docs/OPEN_SOURCE_RELEASE.md](docs/OPEN_SOURCE_RELEASE.md) for the release p
 - [docs/PHASE_LOG.md](docs/PHASE_LOG.md) — Development phase log
 - [docs/CGW2_TELEGRAM_ROUTER.md](docs/CGW2_TELEGRAM_ROUTER.md) — Telegram router architecture
 - [docs/HERMES_INTEGRATION.md](docs/HERMES_INTEGRATION.md) — Hermes / OpenClaw integration guide
+- [docs/CGW3A_LIVE_ADAPTER_SKELETON.md](docs/CGW3A_LIVE_ADAPTER_SKELETON.md) — Live adapter skeleton and CGW-3A architecture
 
 ## Contributing
 

@@ -119,8 +119,72 @@
 - No execution mode (`/agent approve` still not implemented).
 - No file upload support.
 
+## Phase CGW-3A: Live Adapter Skeleton
+
+**Date:** 2026-06-08
+**Goal:** Add adapter-based worker architecture and codex-chatgpt-control adapter skeleton.
+
+### What Was Built
+
+1. **Adapter package** (`chatgpt_visible_bridge/adapters/`)
+   - `base.py` — Adapter ABC with `send()` and `available` properties
+   - `mock.py` — MockAdapter (unchanged behavior, default)
+   - `codex_chatgpt_control.py` — CodexChatGPTControlAdapter skeleton (returns blocked by default)
+   - `registry.py` — `get_adapter()` factory and `list_adapters()`
+   - `__init__.py` — Public API exports
+
+2. **Backward compatibility**
+   - Old `chatgpt_visible_bridge.adapter` module re-exports from new package
+   - `LiveAdapter` alias preserved for backward compatibility
+   - All existing 52 tests continue to pass
+
+3. **CLI adapter support**
+   - `cgpt-worker-once --adapter mock` (explicit)
+   - `cgpt-worker-once --mock` (backward compat)
+   - `cgpt-worker-once --adapter codex-chatgpt-control` (skeleton, blocked)
+   - `cgpt-worker-drain --adapter <name>` (same options)
+
+4. **CodexChatGPTControlAdapter behavior (CGW-3A)**
+   - Returns `blocked` status with `stop_reason: browser_bridge_unavailable`
+   - Detailed summary explaining CGW-3A skeleton status
+   - Points to CGW-3B for real live smoke from compatible browser bridge host
+   - Optional `CGW_LIVE_ADAPTER_DRY_RUN=1` for dry-run blocked result
+   - No real ChatGPT Web operation, no browser launch, no network calls
+
+5. **Blocked result handling**
+   - Writes report.md with full blocker explanation
+   - Writes result.json with blocked status and stop_reason
+   - Moves task to `failed/` with BLOCKED status
+   - Telegram router displays blocked result with summary and next action
+
+6. **Tests** (17 new tests, 69 total)
+   - `test_adapters.py` — 11 adapter unit tests (registry, mock, codex, backward compat)
+   - `test_cgw3a_blocked.py` — 6 integration tests (blocked result, report, Telegram display, CLI)
+   - All 69 tests pass
+
+7. **Documentation**
+   - `docs/CGW3A_LIVE_ADAPTER_SKELETON.md` — Adapter architecture and CGW-3A behavior
+   - Updated `docs/ARCHITECTURE.md` — Adapter layer section
+   - Updated `docs/WORKER_MODES.md` — Adapter selection and live mode
+   - Updated `README.md` — Live adapter skeleton section and CLI adapter options
+   - Added `examples/adapter-commands.md` — Adapter command reference
+
+### Design Decisions
+
+- **Adapter-based architecture**: Worker now uses pluggable adapters, making it easy to add new ChatGPT interfaces in the future.
+- **Skeleton-first**: CGW-3A implements the adapter interface and blocked behavior before attempting real browser automation. This ensures safe failure paths are tested before any real ChatGPT Web interaction.
+- **No real network/browser in CGW-3A**: The codex-chatgpt-control adapter is intentionally blocked. Real live smoke requires a compatible browser bridge host (CGW-3B).
+- **Backward compatibility preserved**: Old import paths and `--mock` flag continue to work.
+
+### Known Limitations (Intentional)
+
+- No real ChatGPT Web adapter (CGW-3A scope; CGW-3B will implement).
+- No real browser automation (blocked by default in skeleton).
+- No file upload/download support.
+- No execution mode (`/agent approve` still not implemented).
+
 ### Next Phase Ideas
 
-- CGW-3: Live adapter integration with `codex-chatgpt-control` or similar browser bridge.
+- CGW-3B: Real live smoke from Codex Desktop / compatible browser bridge host using codex-chatgpt-control.
 
 ---
