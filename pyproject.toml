@@ -28,6 +28,7 @@ cgpt-worker-once = "chatgpt_visible_bridge.cli:main"
 cgpt-worker-drain = "chatgpt_visible_bridge.cli:main"
 cgpt-task-result = "chatgpt_visible_bridge.cli:main"
 cgpt-task-show = "chatgpt_visible_bridge.cli:main"
+cgpt-telegram-router = "chatgpt_visible_bridge.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/conanxin/chatgpt-visible-bridge"

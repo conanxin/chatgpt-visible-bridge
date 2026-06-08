@@ -11,6 +11,7 @@ from pathlib import Path
 from . import __version__
 from .adapter import get_adapter
 from .schema import Task, TaskPolicy, TaskMode, TaskStatus, TaskType
+from .telegram import TelegramRouter
 from .workspace import Workspace
 from .worker import drain, process_one
 
@@ -205,6 +206,14 @@ def _wrap_prompt(task: Task) -> str:
     return "\n".join(lines)
 
 
+def cmd_telegram_router(args: argparse.Namespace) -> int:
+    ws = _workspace()
+    router = TelegramRouter(ws)
+    response = router.route(args.message)
+    print(response)
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     # Detect command from script name if no explicit subcommand provided
     invoked_name = Path(sys.argv[0]).name if sys.argv else "chatgpt-visible-bridge"
@@ -215,6 +224,7 @@ def main(argv: list[str] | None = None) -> int:
         "cgpt-worker-drain": "worker-drain",
         "cgpt-task-result": "task-result",
         "cgpt-task-show": "task-show",
+        "cgpt-telegram-router": "telegram-router",
     }
     default_subcommand = command_map.get(invoked_name)
 
@@ -281,6 +291,11 @@ def main(argv: list[str] | None = None) -> int:
     p_show = sub.add_parser("task-show", help="Show raw and wrapped prompt for a task")
     p_show.add_argument("task_id", help="Task ID")
     p_show.set_defaults(func=cmd_task_show)
+
+    # cgpt-telegram-router (developer helper)
+    p_telegram = sub.add_parser("telegram-router", help="Simulate Telegram message routing (developer helper)")
+    p_telegram.add_argument("message", help="Telegram message text to simulate")
+    p_telegram.set_defaults(func=cmd_telegram_router)
 
     args = parser.parse_args(raw_argv)
     _setup_logging(args.log_level)

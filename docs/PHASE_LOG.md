@@ -68,8 +68,59 @@
 - No retry logic for failed tasks.
 - No task templates or batch creation.
 
+## Phase CGW-2: Telegram Router
+
+**Date:** 2026-06-08
+**Goal:** Add Telegram command routing layer to the ChatGPT Visible Bridge.
+
+### What Was Built
+
+1. **Telegram module** (`chatgpt_visible_bridge/telegram/`)
+   - `parser.py` — Parses `/cgpt` commands into structured `TelegramCommand` objects
+   - `handler.py` — Connects commands to the file-based task queue
+   - `formatter.py` — Formats Telegram-friendly responses (emoji, bullets, no tables)
+   - `router.py` — One-liner convenience: `parse + handle + format`
+   - `__init__.py` — Clean public API exports
+
+2. **Supported commands**
+   - `/cgpt ask <prompt>` — Creates `consult_only` task in inbox
+   - `/cgpt status` — Shows queue counts + recent task IDs
+   - `/cgpt result <task_id>` — Shows result summary + report path
+   - `/cgpt show <task_id>` — Shows task metadata + original prompt
+   - `/cgpt help` — Shows usage instructions
+   - Unknown/invalid — Returns error + help text
+
+3. **CLI integration**
+   - Added `cgpt-telegram-router` command to `cli.py`
+   - Added entry point to `pyproject.toml`
+   - Usage: `python3 -m chatgpt_visible_bridge.cli telegram-router "/cgpt ask Hello"`
+
+4. **Tests** (28 new tests, 52 total)
+   - `tests/test_telegram_parser.py` — 17 parser unit tests
+   - `tests/test_telegram_handler.py` — 11 integration tests with temp CGW_HOME
+   - All 52 tests pass
+
+5. **Documentation**
+   - `docs/CGW2_TELEGRAM_ROUTER.md` — Router architecture and usage
+   - `docs/HERMES_INTEGRATION.md` — Integration guide for OpenClaw/Hermes
+   - Updated `docs/TELEGRAM_WORKFLOW.md` — Current command status
+
+### Design Decisions
+
+- **No real Telegram API**: The router is a library, not a bot. It can be used by any Telegram framework or gateway.
+- **Consult-only enforcement**: All `/cgpt ask` tasks create tasks with `allow_execute=false` and `allow_upload_files=false`.
+- **Telegram-friendly formatting**: No markdown tables, emoji + bullet lists, safe truncation for long prompts.
+- **Temp CGW_HOME in tests**: All integration tests use temporary directories, never touching the real workspace.
+
+### Known Limitations (Intentional)
+
+- No real Telegram bot implementation (out of scope for CGW-2).
+- No OpenClaw/Hermes plugin implementation (this is a library, not a plugin).
+- No execution mode (`/agent approve` still not implemented).
+- No file upload support.
+
 ### Next Phase Ideas
 
-- CGW-2: Telegram bot wrapper that reads/writes the same file-based queue.
-- CGW-3: Live adapter integration with codex-chatgpt-control or Playwright bridge.
-- CGW-4: Task templates, batch creation, and retry logic.
+- CGW-3: Live adapter integration with `codex-chatgpt-control` or similar browser bridge.
+
+---
